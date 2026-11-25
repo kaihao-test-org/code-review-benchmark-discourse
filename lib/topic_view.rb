@@ -902,7 +902,14 @@ class TopicView
 
   def filter_post_types(posts)
     return posts.where(post_type: Post.types[:regular]) if @only_regular
-    posts.where(post_type: Topic.visible_post_types(@user))
+
+    visible_types = Topic.visible_post_types(@user)
+
+    if @user.present?
+      posts.where("posts.user_id = ? OR post_type IN (?)", @user.id, visible_types)
+    else
+      posts.where(post_type: visible_types)
+    end
   end
 
   def filter_posts_by_post_number(post_number, asc)
