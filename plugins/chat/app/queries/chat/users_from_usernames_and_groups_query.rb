@@ -2,14 +2,11 @@
 
 module Chat
   class UsersFromUsernamesAndGroupsQuery
-    def self.call(usernames:, groups:, excluded_user_ids: [], dm_channel: false)
-      opts = { chat_enabled: true }
-      opts[:allow_private_messages] = true if dm_channel
-
+    def self.call(usernames:, groups:, excluded_user_ids: [])
       User
         .joins(:user_option)
         .left_outer_joins(:groups)
-        .where(user_options: opts)
+        .where(user_options: { chat_enabled: true })
         .where(
           "username IN (?) OR (groups.name IN (?) AND group_users.user_id IS NOT NULL)",
           usernames&.map(&:to_s),
