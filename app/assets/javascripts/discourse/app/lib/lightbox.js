@@ -2,10 +2,7 @@ import $ from "jquery";
 import { spinnerHTML } from "discourse/helpers/loading-spinner";
 import { SELECTORS } from "discourse/lib/lightbox/constants";
 import loadScript from "discourse/lib/load-script";
-import {
-  escapeExpression,
-  postRNWebviewMessage,
-} from "discourse/lib/utilities";
+import { postRNWebviewMessage } from "discourse/lib/utilities";
 import User from "discourse/models/user";
 import { isTesting } from "discourse-common/config/environment";
 import deprecated from "discourse-common/lib/deprecated";
@@ -119,7 +116,7 @@ export default function lightbox(elem, siteSettings) {
         titleSrc(item) {
           const href = item.el.data("download-href") || item.src;
           let src = [
-            escapeExpression(item.el.attr("title")),
+            item.el.attr("title"),
             $("span.informations", item.el).text(),
           ];
           if (
